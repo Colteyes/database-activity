@@ -1,9 +1,127 @@
 //Classes with constraints.
 
 
+-- =====================================
+-- DROP TABLES (reverse order)
+-- =====================================
+DROP TABLE sis_courses_within_cred CASCADE CONSTRAINTS;
+DROP TABLE sis_student_credential CASCADE CONSTRAINTS;
+DROP TABLE sis_student_course_record CASCADE CONSTRAINTS;
+DROP TABLE sis_instructor_course CASCADE CONSTRAINTS;
+DROP TABLE sis_scheduled_course CASCADE CONSTRAINTS;
+DROP TABLE sis_course CASCADE CONSTRAINTS;
+DROP TABLE sis_credential CASCADE CONSTRAINTS;
+DROP TABLE sis_instructor CASCADE CONSTRAINTS;
+DROP TABLE sis_student CASCADE CONSTRAINTS;
+
+-- =====================================
+-- CREATE PARENT TABLES(student, instructor, credential, course)
+-- =====================================
+
+CREATE TABLE sis_student (
+  student_id NUMBER PRIMARY KEY,
+  firstname VARCHAR2(30) NOT NULL,
+  lastname VARCHAR2(30) NOT NULL,
+  status VARCHAR2(20),
+  status_date DATE,
+  phone VARCHAR2(15),
+  email VARCHAR2(50)
+);
+
+CREATE TABLE instructor (
+...
+);
+
+CREATE TABLE credential (
+...
+);
+
+CREATE TABLE sis_course (
+  course_code VARCHAR2(10) PRIMARY KEY,
+  course_name VARCHAR2(50),
+  num_of_credits NUMBER(2),
+  prereq_course_code VARCHAR2(10)
+);
+
+-- self-referencing FK
+ALTER TABLE sis_course
+ADD CONSTRAINT fk_course_prereq
+FOREIGN KEY (prereq_course_code)
+REFERENCES course(course_code);
+
+-- =====================================
+-- CHILD TABLES(scheduled_course, instructor_course, student_course_record, student_credential, courses_within_cred)
+-- =====================================
+
+CREATE TABLE sis_scheduled_course (
+...
+);
+
+ALTER TABLE ...
 
 
+CREATE TABLE sis_instructor_course (
+...
+);
+ALTER TABLE ...
 
+
+CREATE TABLE sis_student_course_record (
+  CRN NUMBER,
+  semester_code VARCHAR2(10),
+  student_id NUMBER,
+  credential_id NUMBER,
+  course_code VARCHAR2(10),
+  letter_grade CHAR(2),
+  CONSTRAINT pk_scr PRIMARY KEY (student_id, semester_code, course_code)
+);
+
+ALTER TABLE sis_Student_course_record
+ADD CONSTRAINT fk_scr_student
+FOREIGN KEY (student_id)
+REFERENCES sis_student(student_id);
+
+ALTER TABLE sis_Student_course_record
+ADD CONSTRAINT fk_scr_course
+FOREIGN KEY (course_code)
+REFERENCES sis_course(course_code);
+
+ALTER TABLE sis_Student_course_record
+ADD CONSTRAINT fk_scr_credential
+FOREIGN KEY (credential_id)
+REFERENCES sis_Credential(credential_id);
+
+ALTER TABLE sis_Student_course_record
+ADD CONSTRAINT fk_scr_scheduled
+FOREIGN KEY (CRN)
+REFERENCES sis_scheduled_course(CRN);
+
+
+CREATE TABLE sis_Student_credential (
+  student_id NUMBER,
+  credential_id NUMBER,
+  startdate DATE,
+  completion_date DATE,
+  credential_status VARCHAR2(20),
+  gpa NUMBER(3,2),
+  CONSTRAINT pk_stu_cred PRIMARY KEY (student_id, credential_id)
+);
+
+ALTER TABLE sis_Student_credential
+ADD CONSTRAINT fk_sc_student
+FOREIGN KEY (student_id)
+REFERENCES sis_Student(student_id);
+
+ALTER TABLE sis_Student_credential
+ADD CONSTRAINT fk_sc_cred
+FOREIGN KEY (credential_id)
+REFERENCES sis_Credential(credential_id);
+
+CREATE TABLE sis_courses_within_cred (
+...
+);
+
+ALTER TABLE ...
 
 
 
