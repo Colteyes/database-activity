@@ -96,17 +96,17 @@ CREATE TABLE sis_instructor_course (
 ALTER TABLE sis_instructor_course
 ADD CONSTRAINT fk_ic_crn 
 FOREIGN KEY(CRN)
-REFERENCES sis_scheduled_course(CRN)
+REFERENCES sis_scheduled_course(CRN);
 
 ALTER TABLE sis_instructor_course
 ADD CONSTRAINT fk_ic_sem 
 FOREIGN KEY(semester_code)
-REFERENCES sis_scheduled_course(semester_code)
+REFERENCES sis_scheduled_course(semester_code);
 
 ALTER TABLE sis_instructor_course
 ADD CONSTRAINT fk_ic_instr
 FOREIGN KEY(instructorid)
-REFERENCES sis_instructor(instructorid)
+REFERENCES sis_instructor(instructorid);
 
 CREATE TABLE sis_student_course_record (
   CRN NUMBER,
