@@ -68,9 +68,11 @@ REFERENCES course(course_code);
 
 CREATE TABLE sis_scheduled_course (
   CRN NUMBER(5),
-  semester_code NCHAR(7),
-  course_code NCHAR(7)
-  section_code NCHAR(1)
+  semester_code NCHAR(7)
+    CHECK (REGEXP_LIKE(semester_code, '^[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9]$')),
+  course_code NCHAR(7) NOT NULL,
+  section_code NCHAR(1) NOT NULL
+    CHECK (REGEXP_LIKE(section_code, '^[A-Z]$'))
 );
 
 ALTER TABLE sis_scheduled_course
@@ -80,15 +82,24 @@ REFERENCES sis_course(course_code)
 
 
 CREATE TABLE sis_instructor_course (
-  crn NUMBER,
+  CRN NUMBER,
   semester_code NCHAR(7),
   instructorid NUMBER
 );
 ALTER TABLE sis_instructor_course
 ADD CONSTRAINT fk_inst_course
-FOREIGN KEY(crn)
-REFERENCES sis_scheduled_course()
+FOREIGN KEY(CRN)
+REFERENCES sis_scheduled_course(CRN)
 
+ALTER TABLE sis_instructor_course
+ADD CONSTRAINT fk_inst_course
+FOREIGN KEY(semester_code)
+REFERENCES sis_scheduled_course(semester_code)
+
+ALTER TABLE sis_instructor_course
+ADD CONSTRAINT fk_inst_course
+FOREIGN KEY(instructorid)
+REFERENCES sis_instructor(instructorid)
 
 CREATE TABLE sis_student_course_record (
   CRN NUMBER,
