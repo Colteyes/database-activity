@@ -22,15 +22,22 @@ CREATE TABLE sis_student (
   student_id NUMBER PRIMARY KEY,
   firstname NVARCHAR2(50) NOT NULL,
   lastname NVARCHAR2(50) NOT NULL,
-  status NVARCHAR2(2),
-  status_date DATE,
-  phone NCHAR(12),
-  email NVARCHAR2(100)
+  status NVARCHAR2(2) NOT NULL,
+  status_date DATE NOT NULL,
+  phone NCHAR(12) NOT NULL,
+  email NVARCHAR2(100) NOT NULL
 );
 
 CREATE TABLE instructor (
   instructorid NUMBER PRIMARY KEY,
-  firstname NVARCHAR(50) NOT NULL,
+  firstname NVARCHAR2(50) NOT NULL,
+  lastname NVARCHAR2(50) NOT NULL,
+  address NVARCHAR2(100) NOT NULL,
+  city NVARCHAR2(40) NOT NULL,
+  prov NCHAR(2) NOT NULL,
+  postal_code NCHAR(2) NOT NULL,
+  phonenumber NCHAR(12) NOT NULL CHECK,
+  email NVARCHAR2(100) NOT NULL CHECK  
 );
 
 CREATE TABLE credential (
@@ -62,7 +69,7 @@ ALTER TABLE ...
 
 
 CREATE TABLE sis_instructor_course (
-...
+  
 );
 ALTER TABLE ...
 
