@@ -25,7 +25,7 @@ CREATE TABLE sis_student (
   status NVARCHAR2(2) NOT NULL,
   status_date DATE NOT NULL,
   phone NCHAR(12) NOT NULL
-    CHECK (REGEXP_LIKE(phone, '^[0-9]{3}-[0-9]{3}-[0-9]{4})),
+    CHECK (REGEXP_LIKE(phone, '^[0-9]{3}-[0-9]{3}-[0-9]{4}$')),
   email NVARCHAR2(100) NOT NULL
     CHECK (REGEXP_LIKE(email, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'))
 );
@@ -36,8 +36,8 @@ CREATE TABLE sis_Instructor (
   lastname NVARCHAR2(50) NOT NULL,
   address NVARCHAR2(100) NOT NULL,
   city NVARCHAR2(40) NOT NULL,
-  prov NCHAR(2) NOT NULL 
-    CHECK (REGEXP_LIKE(prov IN ('AB','BC','MB','NB','NL','NS','NT','NU','ON','PE','QC','SK','YT')),
+  prov NCHAR(2) NOT NULL
+  CHECK (prov IN ('AB','BC','MB','NB','NL','NS','NT','NU','ON','PE','QC','SK','YT')),
   postal_code NCHAR(6) NOT NULL
     CHECK (REGEXP_LIKE(postal_code, '^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$')),
   phonenumber NCHAR(12) NOT NULL 
@@ -52,7 +52,7 @@ CREATE TABLE sis_Credential (
   school_name VARCHAR2(50),
   name VARCHAR2(50),
   type VARCHAR2(20)
-    CHECK (REGEXP_LIKE(type IN ('MI', 'FT', 'CT', 'DP', 'AD', 'D'))
+    CHECK (type IN ('MI','FT','CT','DP','AD','D'))
 );
 
 CREATE TABLE sis_course (
@@ -66,14 +66,14 @@ CREATE TABLE sis_course (
 ALTER TABLE sis_course
 ADD CONSTRAINT fk_course_prereq
 FOREIGN KEY (prereq_course_code)
-REFERENCES course(course_code);
+REFERENCES sis_course(course_code);
 
 -- =====================================
 -- CHILD TABLES(scheduled_course, instructor_course, student_course_record, student_credential, courses_within_cred)
 -- =====================================
 
 CREATE TABLE sis_scheduled_course (
-  CRN NUMBER(5),
+  CRN NUMBER(5) PRIMARY KEY,
   semester_code NCHAR(7)
     CHECK (REGEXP_LIKE(semester_code, '^[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9]$')),
   course_code NCHAR(7) NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE sis_scheduled_course (
 ALTER TABLE sis_scheduled_course
 ADD CONSTRAINT fk_shc_course
 FOREIGN KEY(course_code)
-REFERENCES sis_course(course_code)
+REFERENCES sis_course(course_code);
 
 
 CREATE TABLE sis_instructor_course (
@@ -92,18 +92,19 @@ CREATE TABLE sis_instructor_course (
   semester_code NCHAR(7),
   instructorid NUMBER
 );
+
 ALTER TABLE sis_instructor_course
-ADD CONSTRAINT fk_inst_course
+ADD CONSTRAINT fk_ic_crn 
 FOREIGN KEY(CRN)
 REFERENCES sis_scheduled_course(CRN)
 
 ALTER TABLE sis_instructor_course
-ADD CONSTRAINT fk_inst_course
+ADD CONSTRAINT fk_ic_sem 
 FOREIGN KEY(semester_code)
 REFERENCES sis_scheduled_course(semester_code)
 
 ALTER TABLE sis_instructor_course
-ADD CONSTRAINT fk_inst_course
+ADD CONSTRAINT fk_ic_instr
 FOREIGN KEY(instructorid)
 REFERENCES sis_instructor(instructorid)
 
