@@ -56,10 +56,10 @@ CREATE TABLE sis_Credential (
 );
 
 CREATE TABLE sis_course (
-  course_code NCHAR(7) PRIMARY KEY,
+  course_code NVARCHAR2(7) PRIMARY KEY,
   course_name NVARCHAR2(100) NOT NULL,
   num_of_credits NUMBER(2,1) NOT NULL,
-  prereq_course_code VARCHAR2(10)
+  prereq_course_code NVARCHAR2(10)
 );
 
 -- self-referencing FK
