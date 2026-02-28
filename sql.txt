@@ -24,8 +24,10 @@ CREATE TABLE sis_student (
   lastname NVARCHAR2(50) NOT NULL,
   status NVARCHAR2(2) NOT NULL,
   status_date DATE NOT NULL,
-  phone NCHAR(12) NOT NULL,
+  phone NCHAR(12) NOT NULL
+    CHECK (REGEXP_LIKE(phone, '^[0-9]{3}-[0-9]{3}-[0-9]{4})),
   email NVARCHAR2(100) NOT NULL
+    CHECK (REGEXP_LIKE(email, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'))
 );
 
 CREATE TABLE sis_Instructor (
@@ -50,6 +52,7 @@ CREATE TABLE sis_Credential (
   school_name VARCHAR2(50),
   name VARCHAR2(50),
   type VARCHAR2(20)
+    CHECK (REGEXP_LIKE(type IN ('MI', 'FT', 'CT', 'DP', 'AD', 'D'))
 );
 
 CREATE TABLE sis_course (
