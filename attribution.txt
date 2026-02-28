@@ -1,2 +1,19 @@
-Initial start to script: Van: 4 hours
-additions to script: Ioanne: 4hours 
+Attribution List
+
+Initial Meeting & Planning (4 hours):
+Van Dung Vu, Ioanne Gueco, and Mahmood Al Muntasir
+
+Initial Structure Development (4 hours):
+Van Dung Vu
+
+Additional Script Writing (4 hours):
+Ioanne Gueco
+
+Discussions for Improvement (1 hour):
+Van Dung Vu and Ioanne Gueco
+
+Test Running (4 hours):
+Van Dung Vu, Ioanne Gueco, and Mahmood Al Muntasir
+
+Attribution List Compilation: (10 minutes)
+Mahmood Al Muntasir
