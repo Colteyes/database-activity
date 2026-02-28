@@ -28,7 +28,7 @@ CREATE TABLE sis_student (
   email NVARCHAR2(100) NOT NULL
 );
 
-CREATE TABLE instructor (
+CREATE TABLE sis_Instructor (
   instructorid NUMBER PRIMARY KEY,
   firstname NVARCHAR2(50) NOT NULL,
   lastname NVARCHAR2(50) NOT NULL,
@@ -45,8 +45,11 @@ CREATE TABLE instructor (
       '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'))
 );
 
-CREATE TABLE credential (
-...
+CREATE TABLE sis_Credential (
+  credential_id NUMBER PRIMARY KEY,
+  school_name VARCHAR2(50),
+  name VARCHAR2(50),
+  type VARCHAR2(20)
 );
 
 CREATE TABLE sis_course (
@@ -153,10 +156,21 @@ FOREIGN KEY (credential_id)
 REFERENCES sis_Credential(credential_id);
 
 CREATE TABLE sis_courses_within_cred (
-...
+  credential_id NUMBER,
+  course_code VARCHAR2(10),
+  type_flag CHAR(1),
+  CONSTRAINT pk_cwc PRIMARY KEY (credential_id, course_code)
 );
 
-ALTER TABLE ...
+ALTER TABLE sis_courses_within_cred
+ADD CONSTRAINT fk_cwc_cred
+FOREIGN KEY (credential_id)
+REFERENCES sis_credential(credential_id);
+
+ALTER TABLE sis_courses_within_cred
+ADD CONSTRAINT fk_cwc_course
+FOREIGN KEY (course_code)
+REFERENCES sis_course(course_code);
 
 
 
