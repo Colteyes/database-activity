@@ -1,0 +1,121 @@
+-- =========================================
+-- Grand Hill College Lab Script
+-- =========================================
+
+SPOOL lab_output.txt
+
+-- =========================================
+-- 1. Add Departments
+-- =========================================
+
+INSERT INTO ghc_department (dept_no, dept_name)
+VALUES (200, 'Computer Science');
+
+INSERT INTO ghc_department (dept_no, dept_name)
+VALUES (300, 'Mathematics');
+
+
+-- =========================================
+-- 2. Add Faculty Members
+-- =========================================
+
+INSERT INTO ghc_faculty (faculty_id, surname, date_hired, dept_no, available)
+VALUES (1001, 'James Gosling', DATE '2022-01-01', 200, 'Y');
+
+INSERT INTO ghc_faculty (faculty_id, surname, date_hired, dept_no, available)
+VALUES (1002, 'Mohammed Hajit', DATE '2024-01-01', 200, 'Y');
+
+
+-- =========================================
+-- 3. Add Courses
+-- =========================================
+
+INSERT INTO ghc_course (course_code, course_title, credits)
+VALUES ('CPSC201', 'Introduction to Programming', 3);
+
+INSERT INTO ghc_course (course_code, course_title, credits)
+VALUES ('CPSC302', 'OOP', 5);
+
+INSERT INTO ghc_course (course_code, course_title, credits)
+VALUES ('CPSC304', 'Algorithms', 5);
+
+INSERT INTO ghc_course (course_code, course_title, credits)
+VALUES ('CPSC402', 'OOP II', 5);
+
+
+-- =========================================
+-- 4. Add Expertise (James Gosling)
+-- =========================================
+
+INSERT INTO ghc_expertise (faculty_id, course_code)
+VALUES (1001, 'CPSC201');
+
+INSERT INTO ghc_expertise (faculty_id, course_code)
+VALUES (1001, 'CPSC302');
+
+INSERT INTO ghc_expertise (faculty_id, course_code)
+VALUES (1001, 'CPSC304');
+
+
+-- =========================================
+-- 5. Add Expertise (Mohammed Hajit)
+-- =========================================
+
+INSERT INTO ghc_expertise (faculty_id, course_code)
+VALUES (1002, 'CPSC201');
+
+INSERT INTO ghc_expertise (faculty_id, course_code)
+VALUES (1002, 'CPSC302');
+
+INSERT INTO ghc_expertise (faculty_id, course_code)
+VALUES (1002, 'CPSC304');
+
+INSERT INTO ghc_expertise (faculty_id, course_code)
+VALUES (1002, 'CPSC402');
+
+
+-- =========================================
+-- 6. Verify Data
+-- =========================================
+
+SELECT surname, dept_name, date_hired, course_code
+FROM ghc_course
+NATURAL JOIN ghc_expertise
+NATURAL JOIN ghc_faculty
+NATURAL JOIN ghc_department
+ORDER BY 1,4;
+
+
+-- =========================================
+-- 7. Update Course
+-- =========================================
+
+UPDATE ghc_course
+SET course_title = 'Object Oriented Programming',
+    credits = 6
+WHERE course_code = 'CPSC302';
+
+
+-- =========================================
+-- 8. Remove CPSC304 and related expertise
+-- =========================================
+
+DELETE FROM ghc_expertise
+WHERE course_code = 'CPSC304';
+
+DELETE FROM ghc_course
+WHERE course_code = 'CPSC304';
+
+
+-- =========================================
+-- 9. Final Verification
+-- =========================================
+
+SELECT course_code, course_title, faculty_id
+FROM ghc_course
+NATURAL JOIN ghc_expertise
+NATURAL JOIN ghc_faculty
+ORDER BY 1,2;
+
+
+SPOOL OFF
