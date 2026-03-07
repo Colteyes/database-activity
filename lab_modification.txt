@@ -66,12 +66,11 @@ CREATE TABLE GHC_EXPERTISE (
     CONSTRAINT sys_ghc_expert_course_fk FOREIGN KEY (course_code) 
         REFERENCES GHC_COURSE (course_code)
 );
-
 -- =========================================
 -- Grand Hill College Lab Script
 -- =========================================
 
-SPOOL lab_output.txt
+SPOOL C:/cprg250s/lab_7/lab_output.txt
 
 -- =========================================
 -- 1. Add Departments
@@ -186,5 +185,5 @@ NATURAL JOIN ghc_expertise
 NATURAL JOIN ghc_faculty
 ORDER BY 1,2;
 
-COMMIT; 
+
 SPOOL OFF
