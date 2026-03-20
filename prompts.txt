@@ -1,0 +1,7 @@
+Generated using ChatGPT
+
+1. Generate realistic student data
+2. Generate instructors with Canadian addresses
+3. Generate IT courses with prerequisites
+4. Create realistic enrollment data
+5. Generate course-credential relationships
