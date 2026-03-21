@@ -1,61 +1,81 @@
+COLUMN last_name FORMAT A21;
+COLUMN first_name FORMAT A12;
+COLUMN dest_description FORMAT A50;
+COLUMN tour_description FORMAT A25;
+COLUMN rating_description FORMAT A45;
+
 -- ==========================================
 -- Question 1
 -- ==========================================
+BREAK ON last_name ON first_name
 
-SELECT DISTINCT
-       c.first_name,
+SELECT DISTINCT 
        c.last_name,
-       t.destination_desc
-FROM   rcv_customers c
-LEFT JOIN rcv_bookings b USING (customer_id)
-LEFT JOIN rcv_tours t USING (tour_id)
-WHERE  c.state <> 'CA'
-   OR  c.state IS NULL
-ORDER BY c.last_name, c.first_name, t.destination_desc;
+       c.first_name,
+       d.dest_description
+FROM   rcv_customer c
+LEFT JOIN rcv_tour_customer tc
+       USING (customer_number)
+LEFT JOIN rcv_tour_destination td
+       USING (tour_code)
+LEFT JOIN rcv_destination d
+       USING (dest_code)
+WHERE  c.customer_province <> 'CA'
+   OR  c.customer_province IS NULL
+ORDER BY c.last_name, c.first_name, d.dest_description;
 
 -- ==========================================
--- Question 2 (NO JOIN clause)
+-- Question 2 (NO JOIN)
 -- ==========================================
-
-SELECT DISTINCT
-       c.first_name,
+SELECT DISTINCT 
        c.last_name,
-       t.destination_desc
-FROM   rcv_customers c,
-       rcv_bookings b,
-       rcv_tours t
-WHERE  c.customer_id = b.customer_id(+)
-AND    b.tour_id = t.tour_id(+)
-AND   (c.state <> 'CA' OR c.state IS NULL)
-ORDER BY c.last_name, c.first_name, t.destination_desc;
+       c.first_name,
+       d.dest_description
+FROM   rcv_customer c,
+       rcv_tour_customer tc,
+       rcv_tour_destination td,
+       rcv_destination d
+WHERE  c.customer_number = tc.customer_number(+)
+AND    tc.tour_code = td.tour_code(+)
+AND    td.dest_code = d.dest_code(+)
+AND   (c.customer_province <> 'CA' OR c.customer_province IS NULL)
+ORDER BY c.last_name, c.first_name, d.dest_description;
 
 -- ==========================================
 -- Question 3
 -- ==========================================
+CLEAR BREAKS
 
-SELECT DISTINCT
-       a.first_name,
+SELECT DISTINCT 
        a.last_name,
+       a.first_name,
        t.tour_description,
-       t.rating_description
-FROM   rcv_agents a
-LEFT JOIN rcv_bookings b
-       ON a.agent_id = b.agent_id
-LEFT JOIN rcv_tours t
-       ON b.tour_id = t.tour_id
+       r.rating_description
+FROM   rcv_agent a
+LEFT JOIN rcv_customer c
+       ON a.agent_id = c.agent_id
+LEFT JOIN rcv_tour_customer tc
+       ON c.customer_number = tc.customer_number
+LEFT JOIN rcv_vacation_tour t
+       ON tc.tour_code = t.tour_code
+LEFT JOIN rcv_rating r
+       ON t.rating_code = r.rating_code
 ORDER BY a.last_name, a.first_name, t.tour_description;
 
 -- ==========================================
 -- Question 4
 -- ==========================================
+BREAK ON last_name ON first_name
 
-SELECT DISTINCT
+SELECT DISTINCT 
        c.first_name,
        c.last_name,
-       t.rating_description
-FROM   rcv_customers c
-JOIN   rcv_bookings b
-       ON c.customer_id = b.customer_id
-JOIN   rcv_tours t
-       ON b.tour_id = t.tour_id
-ORDER BY c.last_name, c.first_name, t.rating_description;
+       r.rating_description
+FROM   rcv_customer c
+JOIN   rcv_tour_customer tc
+       ON c.customer_number = tc.customer_number
+JOIN   rcv_vacation_tour t
+       ON tc.tour_code = t.tour_code
+JOIN   rcv_rating r
+       ON t.rating_code = r.rating_code
+ORDER BY c.last_name, c.first_name, r.rating_description;
