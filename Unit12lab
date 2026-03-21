@@ -1,0 +1,61 @@
+-- ==========================================
+-- Question 1
+-- ==========================================
+
+SELECT DISTINCT
+       c.first_name,
+       c.last_name,
+       t.destination_desc
+FROM   rcv_customers c
+LEFT JOIN rcv_bookings b USING (customer_id)
+LEFT JOIN rcv_tours t USING (tour_id)
+WHERE  c.state <> 'CA'
+   OR  c.state IS NULL
+ORDER BY c.last_name, c.first_name, t.destination_desc;
+
+-- ==========================================
+-- Question 2 (NO JOIN clause)
+-- ==========================================
+
+SELECT DISTINCT
+       c.first_name,
+       c.last_name,
+       t.destination_desc
+FROM   rcv_customers c,
+       rcv_bookings b,
+       rcv_tours t
+WHERE  c.customer_id = b.customer_id(+)
+AND    b.tour_id = t.tour_id(+)
+AND   (c.state <> 'CA' OR c.state IS NULL)
+ORDER BY c.last_name, c.first_name, t.destination_desc;
+
+-- ==========================================
+-- Question 3
+-- ==========================================
+
+SELECT DISTINCT
+       a.first_name,
+       a.last_name,
+       t.tour_description,
+       t.rating_description
+FROM   rcv_agents a
+LEFT JOIN rcv_bookings b
+       ON a.agent_id = b.agent_id
+LEFT JOIN rcv_tours t
+       ON b.tour_id = t.tour_id
+ORDER BY a.last_name, a.first_name, t.tour_description;
+
+-- ==========================================
+-- Question 4
+-- ==========================================
+
+SELECT DISTINCT
+       c.first_name,
+       c.last_name,
+       t.rating_description
+FROM   rcv_customers c
+JOIN   rcv_bookings b
+       ON c.customer_id = b.customer_id
+JOIN   rcv_tours t
+       ON b.tour_id = t.tour_id
+ORDER BY c.last_name, c.first_name, t.rating_description;
