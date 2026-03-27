@@ -17,8 +17,9 @@ SELECT
     a.first_name,
     a.last_name,
     SUBSTR(t.training_description, 1, 20) AS training_desc,
-    
-    ADD_MONTHS(at.date_completed, 60) AS expiry_date
+    ADD_MONTHS(at.date_completed, 60) AS date_completed
+    --we need to find a way to put the expiry date, as that's needed (Expiry date= years in date_completed +5)
+    t.duration_hours || ' Hrs' AS duration,
 FROM rcv_agent a
 JOIN rcv_agent_training at ON a.agent_id = at.agent_id
 JOIN rcv_training t ON at.training_code = t.training_code
