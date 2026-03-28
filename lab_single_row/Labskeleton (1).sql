@@ -39,7 +39,7 @@ COLUMN city FORMAT A15;
 COLUMN price FORMAT A12;
 COLUMN category FORMAT A10;
 
-BREAK ON country ON NVL ON city SKIP 1
+BREAK ON country ON state ON city SKIP 1
 
 SELECT 
     country,
