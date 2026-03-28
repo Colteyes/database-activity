@@ -11,19 +11,21 @@ COLUMN first_name FORMAT A15;
 COLUMN last_name FORMAT A15;
 COLUMN training_desc FORMAT A25 HEADING 'Training Description';
 COLUMN duration FORMAT A10 HEADING 'Hrs';
+Column date_completed FORMAT A15 HEADING 'Date Completed';
 COLUMN expiry_date FORMAT A15 HEADING 'Expiry Date';
 
+BREAK ON first_name ON last_name  SKIP 1
 SELECT 
     a.first_name,
     a.last_name,
     SUBSTR(t.training_description, 1, 20) AS training_desc,
-    ADD_MONTHS(at.date_completed, 60) AS date_completed
-    --we need to find a way to put the expiry date, as that's needed (Expiry date= years in date_completed +5)
-    t.duration_hours || ' Hrs' AS duration,
+    TO_CHAR(at.date_completed, 'Mon DD, YYYY') AS date_completed,
+    TO_CHAR(ADD_MONTHS(at.date_completed, 60), 'Mon DD, YYYY') AS expiry_date,
+    duration_hours || 'Hrs' AS duration
 FROM rcv_agent a
 JOIN rcv_agent_training at ON a.agent_id = at.agent_id
 JOIN rcv_training t ON at.training_code = t.training_code
-ORDER BY a.last_name, a.first_name, t.training_description;
+ORDER BY a.last_name, a.first_name, training_desc;
 
 CLEAR COLUMNS;
 
@@ -36,6 +38,8 @@ COLUMN state FORMAT A10;
 COLUMN city FORMAT A15;
 COLUMN price FORMAT A12;
 COLUMN category FORMAT A10;
+
+BREAK ON country ON NVL ON city SKIP 1
 
 SELECT 
     country,
