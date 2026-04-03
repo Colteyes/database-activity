@@ -1,0 +1,74 @@
+SPOOL really_cheap_vacations_output.txt
+
+SET ECHO OFF;
+SET LINESIZE 150;
+SET PAGESIZE 100;
+
+--------------------------------------------------
+-- QUESTION 1 FORMAT
+--------------------------------------------------
+COLUMN first_name FORMAT A15 HEADING 'First';
+COLUMN last_name FORMAT A30 HEADING 'Last';
+COLUMN num_of_tours FORMAT 999 HEADING '# of Tours';
+COLUMN total_value FORMAT $999,999.99 HEADING 'Value';
+
+--------------------------------------------------
+-- QUESTION 1
+--------------------------------------------------
+SELECT 
+    c.first_name,
+    c.last_name,
+    COUNT(DISTINCT t.tour_code) AS num_of_tours,
+    SUM(d.price) AS total_value
+FROM customer c
+JOIN booking b 
+    ON c.customer_id = b.customer_id
+JOIN tour t 
+    ON b.tour_code = t.tour_code
+JOIN destination d 
+    ON t.tour_code = d.tour_code
+GROUP BY 
+    c.first_name, 
+    c.last_name
+ORDER BY 
+    c.last_name, 
+    c.first_name;
+
+CLEAR COLUMNS;
+
+--------------------------------------------------
+-- QUESTION 2 FORMAT
+--------------------------------------------------
+COLUMN first_name FORMAT A15 HEADING 'First';
+COLUMN last_name FORMAT A30 HEADING 'Last';
+COLUMN total_value FORMAT $999,999.99 HEADING 'Total';
+
+--------------------------------------------------
+-- QUESTION 2
+--------------------------------------------------
+SELECT 
+    c.first_name,
+    c.last_name,
+    SUM(d.price) AS total_value
+FROM customer c
+JOIN booking b 
+    ON c.customer_id = b.customer_id
+JOIN tour t 
+    ON b.tour_code = t.tour_code
+JOIN destination d 
+    ON t.tour_code = d.tour_code
+GROUP BY 
+    c.first_name, 
+    c.last_name
+HAVING 
+    SUM(d.price) > 2000
+ORDER BY 
+    c.last_name, 
+    c.first_name;
+
+CLEAR COLUMNS;
+
+--------------------------------------------------
+-- END
+--------------------------------------------------
+SPOOL OFF;
