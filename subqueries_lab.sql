@@ -1,3 +1,28 @@
+
+SPOOL C:\cprg250s\Lab_subqueries\subqueries_output.txt
+
+-- =====================================
+-- QUESTION 1 (Most Popular Destination)
+-- =====================================
+SET LINESIZE 100;
+
+COLUMN TOUR_DESCRIPTION FORMAT A40;
+COLUMN NUMBER FORMAT 9;
+
+SELECT vt.tour_description
+FROM rcv_vacation_tour vt
+WHERE vt.tour_code IN (
+  SELECT tour_code
+  FROM rcv_tour_customer
+  GROUP BY tour_code
+  HAVING COUNT(*) =(
+    SELECT MAX(COUNT(*))
+    FROM rcv_tour_customer
+    GROUP by tour_code
+  )
+);
+
+
 -- =====================================
 -- QUESTION 2 (Lionel Messie)
 -- =====================================
@@ -36,3 +61,6 @@ AND NOT (
 ORDER BY c.first_name, c.last_name;
 
 CLEAR COLUMNS;
+
+
+SPOOL off
