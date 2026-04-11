@@ -1,0 +1,6 @@
+    ON i.instructor_id = ic.instructor_id
+                         *
+ERROR at line 6:
+ORA-00904: "IC"."INSTRUCTOR_ID": invalid identifier 
+
+

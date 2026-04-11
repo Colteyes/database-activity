@@ -1,0 +1,6 @@
+    ON c.prereq_code = p.course_code
+       *
+ERROR at line 6:
+ORA-00904: "C"."PREREQ_CODE": invalid identifier 
+
+
