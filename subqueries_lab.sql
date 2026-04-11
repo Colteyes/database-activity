@@ -69,8 +69,8 @@ ORDER BY c.first_name, c.last_name;
 
 SET LINESIZE 150;
 
-COLUMN AGENT_NAME FORMAT A30;
-COLUMN TOTAL_VALUE FORMAT 999999.99;
+COLUMN agent_name HEADING 'Name' FORMAT A20;
+COLUMN total_value HEADING 'Value of Tours Sold' FORMAT $999,999.99;
 
 SELECT 
     a.first_name || ' ' || a.last_name AS agent_name,
@@ -105,9 +105,8 @@ HAVING SUM(d.price) > (
         GROUP BY a2.agent_id, a2.first_name, a2.last_name
     )
 )
-ORDER BY agent_name;
-
-CLEAR COLUMNS;
+ORDER BY agent_name
+    
 CLEAR COLUMNS;
 
 
