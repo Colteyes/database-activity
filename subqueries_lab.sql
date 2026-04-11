@@ -7,7 +7,7 @@ SPOOL C:\cprg250s\Lab_subqueries\subqueries_output.txt
 SET LINESIZE 100;
 
 COLUMN TOUR_DESCRIPTION FORMAT A40;
-COLUMN TOTAL_CUSTOMERS FORMAT 999;
+COLUMN Number FORMAT 999;
 
 SELECT vt.tour_description, t.total_customers
 FROM rcv_vacation_tour vt
