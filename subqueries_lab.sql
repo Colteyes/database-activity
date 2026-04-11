@@ -7,7 +7,7 @@ SPOOL C:\cprg250s\Lab_subqueries\subqueries_output.txt
 SET LINESIZE 100;
 
 COLUMN TOUR_DESCRIPTION FORMAT A40;
-COLUMN NUMBER FORMAT 999;
+COLUMN TOTAL_CUSTOMERS FORMAT 999;
 
 SELECT vt.tour_description, t.total_customers
 FROM rcv_vacation_tour vt
@@ -105,7 +105,7 @@ HAVING SUM(d.price) > (
         GROUP BY a2.agent_id, a2.first_name, a2.last_name
     )
 )
-ORDER BY agent_name
+ORDER BY agent_name;
     
 CLEAR COLUMNS;
 
