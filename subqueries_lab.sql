@@ -21,7 +21,7 @@ JOIN (
         GROUP BY tour_code
     )
 ) t ON vt.tour_code = t.tour_code;
-
+CLEAR COLUMNS;
 -- =====================================
 -- QUESTION 2 (Lionel Messie)
 -- =====================================
@@ -62,7 +62,7 @@ AND NOT (
     AND c.last_name = 'Messie'
 )
 ORDER BY c.first_name, c.last_name;
-
+CLEAR COLUMNS;
 -- =====================================
 -- QUESTION 3 (Agents above average sales)
 -- =====================================
