@@ -77,7 +77,7 @@ SELECT
     SUM(d.price) AS total_value
 FROM rcv_agent a
 JOIN rcv_customer c
-    ON a.agent_code = c.agent_code
+    ON a.agent_id = t.agent_id
 JOIN rcv_tour_customer tc 
     ON c.customer_number = tc.customer_number
 JOIN rcv_vacation_tour t 
