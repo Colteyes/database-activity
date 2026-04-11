@@ -63,6 +63,44 @@ AND NOT (
 )
 ORDER BY c.first_name, c.last_name;
 
+-- =====================================
+-- QUESTION 3 (Agents above average sales)
+-- =====================================
+
+SET LINESIZE 150;
+
+COLUMN AGENT_NAME FORMAT A30;
+COLUMN TOTAL_VALUE FORMAT 999999.99;
+
+SELECT 
+    a.first_name || ' ' || a.last_name AS agent_name,
+    SUM(d.price) AS total_value
+FROM rcv_agent a
+JOIN rcv_vacation_tour t 
+    ON a.agent_code = t.agent_code
+JOIN rcv_tour_destination td 
+    ON t.tour_code = td.tour_code
+JOIN rcv_destination d 
+    ON td.dest_code = d.dest_code
+GROUP BY a.first_name, a.last_name
+HAVING SUM(d.price) > (
+    SELECT AVG(total_sales)
+    FROM (
+        SELECT SUM(d2.price) AS total_sales
+        FROM rcv_agent a2
+        JOIN rcv_vacation_tour t2 
+            ON a2.agent_code = t2.agent_code
+        JOIN rcv_tour_destination td2 
+            ON t2.tour_code = td2.tour_code
+        JOIN rcv_destination d2 
+            ON td2.dest_code = d2.dest_code
+        GROUP BY a2.first_name, a2.last_name
+    )
+)
+ORDER BY agent_name;
+
+CLEAR COLUMNS;
+
 CLEAR COLUMNS;
 
 
