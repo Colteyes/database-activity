@@ -1,0 +1,8 @@
+
+FIRSTNAME  LASTNAME   NAME                      AVG_GPA                                                                                                                                                 
+---------- ---------- ------------------------- -------                                                                                                                                                 
+John       Smith      Web Development              3.80                                                                                                                                                 
+John       Smith      Data Analytics               3.60                                                                                                                                                 
+Dung       Vu         Software Development         3.50                                                                                                                                                 
+Lisa       Chen       Data Analytics               3.40                                                                                                                                                 
+

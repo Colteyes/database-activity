@@ -1,0 +1,7 @@
+
+COURSE_NAME               INSTRUCTOR_NAME                                                                                                                                                               
+------------------------- -------------------------                                                                                                                                                     
+Intro to Programming      David Lee                                                                                                                                                                     
+Java Programming          David Lee                                                                                                                                                                     
+Python Programming                                                                                                                                                                                      
+

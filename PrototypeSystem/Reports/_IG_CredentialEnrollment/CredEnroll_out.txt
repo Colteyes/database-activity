@@ -1,0 +1,7 @@
+
+CREDENTIAL_NAME                                    TOTAL_STUDENTS                                                                                                                                       
+-------------------------------------------------- --------------                                                                                                                                       
+Web Development                                                 2                                                                                                                                       
+Data Analytics                                                  2                                                                                                                                       
+Software Development                                            1                                                                                                                                       
+

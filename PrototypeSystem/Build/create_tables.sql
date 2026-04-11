@@ -1,0 +1,182 @@
+//Classes with constraints.
+
+--Spool and File creation/structure by Ioanne
+--main code by Van
+--testing and improvment by Ioanne
+
+
+-- =====================================
+-- DROP TABLES (reverse order)
+-- =====================================
+DROP TABLE sis_courses_within_cred CASCADE CONSTRAINTS;
+DROP TABLE sis_student_credential CASCADE CONSTRAINTS;
+DROP TABLE sis_student_course_record CASCADE CONSTRAINTS;
+DROP TABLE sis_instructor_course CASCADE CONSTRAINTS;
+DROP TABLE sis_scheduled_course CASCADE CONSTRAINTS;
+DROP TABLE sis_course CASCADE CONSTRAINTS;
+DROP TABLE sis_credential CASCADE CONSTRAINTS;
+DROP TABLE sis_instructor CASCADE CONSTRAINTS;
+DROP TABLE sis_student CASCADE CONSTRAINTS;
+
+-- =====================================
+-- CREATE PARENT TABLES(student, instructor, credential, course)
+-- =====================================
+
+--starting the spool file
+SPOOL C:\cprg250s\SIS_prt6\create_script_output.txt
+
+CREATE TABLE sis_student (
+  student_id NUMBER PRIMARY KEY,
+  firstname NVARCHAR2(50) NOT NULL,
+  lastname NVARCHAR2(50) NOT NULL,
+  status NVARCHAR2(2) NOT NULL,
+  status_date DATE NOT NULL,
+  phone NCHAR(12) NOT NULL
+    CHECK (REGEXP_LIKE(phone, '^[0-9]{3}-[0-9]{3}-[0-9]{4}$')),
+  email NVARCHAR2(100) NOT NULL
+    CHECK (REGEXP_LIKE(email, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'))
+);
+
+CREATE TABLE sis_Instructor (
+  instructorid NUMBER PRIMARY KEY,
+  firstname NVARCHAR2(50) NOT NULL,
+  lastname NVARCHAR2(50) NOT NULL,
+  address NVARCHAR2(100) NOT NULL,
+  city NVARCHAR2(40) NOT NULL,
+  prov NCHAR(2) NOT NULL
+  CHECK (prov IN ('AB','BC','MB','NB','NL','NS','NT','NU','ON','PE','QC','SK','YT')),
+  postal_code NCHAR(6) NOT NULL
+    CHECK (REGEXP_LIKE(postal_code, '^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$')),
+  phonenumber NCHAR(12) NOT NULL 
+    CHECK (REGEXP_LIKE(phonenumber, '^[0-9]{3}-[0-9]{3}-[0-9]{4}$')),
+  email NVARCHAR2(100) NOT NULL 
+    CHECK (REGEXP_LIKE(email,
+      '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'))
+);
+
+CREATE TABLE sis_Credential (
+  credential_id NUMBER PRIMARY KEY,
+  school_name VARCHAR2(50),
+  name VARCHAR2(50),
+  type VARCHAR2(20)
+    CHECK (type IN ('MI','FT','CT','DP','AD','D'))
+);
+
+CREATE TABLE sis_course (
+  course_code NCHAR(7) PRIMARY KEY,
+  course_name NVARCHAR2(100) NOT NULL,
+  num_of_credits NUMBER(2,1) NOT NULL,
+  prereq_course_code NCHAR(7)
+);
+
+-- self-referencing FK
+ALTER TABLE sis_course
+ADD CONSTRAINT fk_course_prereq
+FOREIGN KEY (prereq_course_code)
+REFERENCES sis_course(course_code);
+
+-- =====================================
+-- CHILD TABLES(scheduled_course, instructor_course, student_course_record, student_credential, courses_within_cred)
+-- =====================================
+
+CREATE TABLE sis_scheduled_course (
+  CRN NUMBER(5) PRIMARY KEY,
+  semester_code NCHAR(8)
+    CHECK (REGEXP_LIKE(semester_code, '^[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9]$')),
+  course_code NCHAR(7) NOT NULL,
+  section_code NCHAR(1) NOT NULL
+    CHECK (REGEXP_LIKE(section_code, '^[A-Z]$'))
+);
+
+ALTER TABLE sis_scheduled_course
+ADD CONSTRAINT fk_shc_course
+FOREIGN KEY(course_code)
+REFERENCES sis_course(course_code);
+
+
+CREATE TABLE sis_instructor_course (
+  CRN NUMBER,
+  semester_code NCHAR(8),
+  instructorid NUMBER
+);
+
+ALTER TABLE sis_instructor_course
+ADD CONSTRAINT fk_ic_crn 
+FOREIGN KEY(CRN)
+REFERENCES sis_scheduled_course(CRN);
+
+ALTER TABLE sis_instructor_course
+ADD CONSTRAINT fk_ic_instr
+FOREIGN KEY(instructorid)
+REFERENCES sis_instructor(instructorid);
+
+CREATE TABLE sis_student_course_record (
+  CRN NUMBER,
+  semester_code VARCHAR2(10),
+  student_id NUMBER,
+  credential_id NUMBER,
+  course_code NCHAR(7),
+  letter_grade CHAR(2),
+  CONSTRAINT pk_scr PRIMARY KEY (student_id, semester_code, course_code)
+);
+
+ALTER TABLE sis_Student_course_record
+ADD CONSTRAINT fk_scr_student
+FOREIGN KEY (student_id)
+REFERENCES sis_student(student_id);
+
+ALTER TABLE sis_Student_course_record
+ADD CONSTRAINT fk_scr_course
+FOREIGN KEY (course_code)
+REFERENCES sis_course(course_code);
+
+ALTER TABLE sis_Student_course_record
+ADD CONSTRAINT fk_scr_credential
+FOREIGN KEY (credential_id)
+REFERENCES sis_Credential(credential_id);
+
+ALTER TABLE sis_Student_course_record
+ADD CONSTRAINT fk_scr_scheduled
+FOREIGN KEY (CRN)
+REFERENCES sis_scheduled_course(CRN);
+
+
+CREATE TABLE sis_Student_credential (
+  student_id NUMBER,
+  credential_id NUMBER,
+  startdate DATE,
+  completion_date DATE,
+  credential_status VARCHAR2(20),
+  gpa NUMBER(3,2),
+  CONSTRAINT pk_stu_cred PRIMARY KEY (student_id, credential_id)
+);
+
+ALTER TABLE sis_Student_credential
+ADD CONSTRAINT fk_sc_student
+FOREIGN KEY (student_id)
+REFERENCES sis_Student(student_id);
+
+ALTER TABLE sis_Student_credential
+ADD CONSTRAINT fk_sc_cred
+FOREIGN KEY (credential_id)
+REFERENCES sis_Credential(credential_id);
+
+CREATE TABLE sis_courses_within_cred (
+  credential_id NUMBER,
+  course_code NCHAR(7),
+  type_flag CHAR(1),
+  CONSTRAINT pk_cwc PRIMARY KEY (credential_id, course_code)
+);
+
+ALTER TABLE sis_courses_within_cred
+ADD CONSTRAINT fk_cwc_cred
+FOREIGN KEY (credential_id)
+REFERENCES sis_credential(credential_id);
+
+ALTER TABLE sis_courses_within_cred
+ADD CONSTRAINT fk_cwc_course
+FOREIGN KEY (course_code)
+REFERENCES sis_course(course_code);
+
+SPOOL OFF
+

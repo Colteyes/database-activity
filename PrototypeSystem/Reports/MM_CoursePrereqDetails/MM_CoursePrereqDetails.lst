@@ -1,0 +1,20 @@
+
+COURSE_NAME               PREREQUISITE_COURSE                                                                                                                                                           
+------------------------- ----------------------------------------------------------------------------------------------------                                                                          
+API Development           Advanced Java                                                                                                                                                                 
+Advanced Java             Java Programming                                                                                                                                                              
+Cloud Computing           SQL Advanced                                                                                                                                                                  
+Cybersecurity             Database Systems                                                                                                                                                              
+Data Analysis             Python Programming                                                                                                                                                            
+Database Systems          Intro to Programming                                                                                                                                                          
+DevOps                    Advanced Java                                                                                                                                                                 
+Java Programming          Intro to Programming                                                                                                                                                          
+JavaScript                Web Basics                                                                                                                                                                    
+Machine Learning          Data Analysis                                                                                                                                                                 
+Mobile Development        JavaScript                                                                                                                                                                    
+Python Programming        Intro to Programming                                                                                                                                                          
+ReactJS                   JavaScript                                                                                                                                                                    
+SQL Advanced              Database Systems                                                                                                                                                              
+
+14 rows selected.
+
