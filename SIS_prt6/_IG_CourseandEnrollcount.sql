@@ -1,11 +1,18 @@
--- REPORT 2: Courses and Enrollment Count
+-- REPORT 2: Courses and Instructors (including courses with no instructor)
+
+COLUMN course_name FORMAT A25;
+COLUMN instructor_name FORMAT A25;
 
 SELECT 
-    c.course_code,
     c.course_name,
-    COUNT(scr.student_id) AS total_students  -- Group function
+    NVL(i.firstname || ' ' || i.lastname, 'No Instructor') AS instructor_name
 FROM sis_course c
-LEFT OUTER JOIN sis_student_course_record scr   -- OUTER JOIN
-    ON c.course_code = scr.course_code
-GROUP BY c.course_code, c.course_name
-ORDER BY total_students DESC;
+LEFT OUTER JOIN sis_scheduled_course sc
+    ON c.course_code = sc.course_code
+LEFT OUTER JOIN sis_instructor_course ic
+    ON sc.CRN = ic.CRN
+LEFT OUTER JOIN sis_instructor i
+    ON ic.instructorid = i.instructorid
+WHERE c.num_of_credits >= 3
+  AND c.course_name LIKE '%Programming%'
+ORDER BY c.course_name;

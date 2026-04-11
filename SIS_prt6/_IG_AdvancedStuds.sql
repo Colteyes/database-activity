@@ -1,16 +1,26 @@
+-- REPORT 1: Student GPA by Credential
+
+COLUMN firstname FORMAT A10;
+COLUMN lastname FORMAT A10;
+COLUMN name FORMAT A25;
+COLUMN avg_gpa FORMAT 9.99;
+
 SELECT 
     s.firstname,
     s.lastname,
-    scr.course_code,
-    scr.letter_grade
+    c.name,
+    AVG(sc.gpa) AS avg_gpa   
 FROM sis_student s
-INNER JOIN sis_student_course_record scr   -- INNER JOIN
-    ON s.student_id = scr.student_id
-WHERE scr.course_code IN (
-        SELECT course_code              -- SUBQUERY
-        FROM sis_course
-        WHERE course_code LIKE 'CPSC3%'  -- condition inside subquery
-    )
-AND scr.letter_grade IN ('A','B')         -- WHERE condition #1
-AND s.status = 'AC'                       -- WHERE condition #2
-ORDER BY s.lastname, s.firstname;
+INNER JOIN sis_student_credential sc  
+    ON s.student_id = sc.student_id
+INNER JOIN sis_credential c
+    ON sc.credential_id = c.credential_id
+WHERE 
+    sc.credential_status = 'ACTIVE'  
+    AND sc.gpa > 3.0                  
+GROUP BY 
+    s.firstname, s.lastname, c.name
+HAVING 
+    AVG(sc.gpa) > 3.2               
+ORDER BY 
+    avg_gpa DESC;                   
