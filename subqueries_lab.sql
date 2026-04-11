@@ -76,28 +76,38 @@ SELECT
     a.first_name || ' ' || a.last_name AS agent_name,
     SUM(d.price) AS total_value
 FROM rcv_agent a
+JOIN rcv_customer c
+    ON a.agent_id = c.agent_id
+JOIN rcv_tour_customer tc 
+    ON c.customer_number = tc.customer_number
 JOIN rcv_vacation_tour t 
-    ON a.agent_code = t.agent_code
+    ON tc.tour_code = t.tour_code
 JOIN rcv_tour_destination td 
     ON t.tour_code = td.tour_code
 JOIN rcv_destination d 
     ON td.dest_code = d.dest_code
-GROUP BY a.agent_code, a.first_name, a.last_name
+GROUP BY a.agent_id, a.first_name, a.last_name
 HAVING SUM(d.price) > (
     SELECT AVG(total_sales)
     FROM (
         SELECT SUM(d2.price) AS total_sales
         FROM rcv_agent a2
+        JOIN rcv_customer c2
+            ON a2.agent_id = c2.agent_id
+        JOIN rcv_tour_customer tc2 
+            ON c2.customer_number = tc2.customer_number
         JOIN rcv_vacation_tour t2 
-            ON a2.agent_code = t2.agent_code
+            ON tc2.tour_code = t2.tour_code
         JOIN rcv_tour_destination td2 
             ON t2.tour_code = td2.tour_code
         JOIN rcv_destination d2 
             ON td2.dest_code = d2.dest_code
-        GROUP BY a2.agent_code, a2.first_name, a2.last_name
+        GROUP BY a2.agent_id, a2.first_name, a2.last_name
     )
 )
 ORDER BY agent_name;
+
+CLEAR COLUMNS;
 CLEAR COLUMNS;
 
 
