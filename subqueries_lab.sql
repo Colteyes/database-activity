@@ -82,7 +82,7 @@ JOIN rcv_tour_destination td
     ON t.tour_code = td.tour_code
 JOIN rcv_destination d 
     ON td.dest_code = d.dest_code
-GROUP BY a.first_name, a.last_name
+GROUP BY a.agent_code, a.first_name, a.last_name
 HAVING SUM(d.price) > (
     SELECT AVG(total_sales)
     FROM (
@@ -94,12 +94,10 @@ HAVING SUM(d.price) > (
             ON t2.tour_code = td2.tour_code
         JOIN rcv_destination d2 
             ON td2.dest_code = d2.dest_code
-        GROUP BY a2.first_name, a2.last_name
+        GROUP BY a2.agent_code, a2.first_name, a2.last_name
     )
 )
 ORDER BY agent_name;
-
-CLEAR COLUMNS;
 
 CLEAR COLUMNS;
 
