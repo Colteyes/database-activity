@@ -23,7 +23,7 @@ DROP TABLE sis_student CASCADE CONSTRAINTS;
 -- =====================================
 
 --starting the spool file
-SPOOL C:\cprg250s\database_5\build\create_script_output.txt
+SPOOL C:\cprg250s\SIS_prt6\create_script_output.txt
 
 CREATE TABLE sis_student (
   student_id NUMBER PRIMARY KEY,

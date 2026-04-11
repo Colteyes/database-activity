@@ -13,7 +13,7 @@ DELETE FROM sis_instructor;
 DELETE FROM sis_student;
 
 --Spool file creation (Ioanne):
-SPOOL C:\cprg250s\database_5\populate\populate_output.txt
+SPOOL C:\cprg250s\SIS_prt6\populate_output.txt
 
 -- ============================================
 -- INSERT STUDENTS (5)
